@@ -2,6 +2,13 @@
 
 import { useState } from "react"
 import { UploadIcon, FileText, Briefcase } from "lucide-react"
+import mammoth from "mammoth";  
+
+import * as pdfjsLib from 'pdfjs-dist';
+import pdfWorker from '../pdfWorker'; // or './pdfWorker'
+
+// ✅ Use workerPort (not workerSrc)
+pdfjsLib.GlobalWorkerOptions.workerPort = new pdfWorker();
 
 export default function Upload() {
   const [file, setFile] = useState(null)
@@ -34,11 +41,102 @@ export default function Upload() {
     }
   }
 
-  const handleSubmit = (e) => {
+
+  const extractTextFromPDF = async (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = async () => {
+        try {
+          const typedArray = new Uint8Array(reader.result);
+          const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
+          let text = "";
+  
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+            const strings = content.items.map((item) => item.str);
+            text += strings.join(" ") + "\n";
+          }
+  
+          resolve(text);
+        } catch (err) {
+          reject(err);
+        }
+      };
+  
+      reader.readAsArrayBuffer(file);
+    });
+  };
+  
+
+  const extractTextFromDocx = async (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = async (e) => {
+        try {
+          const arrayBuffer = e.target.result;
+          const result = await mammoth.extractRawText({ arrayBuffer });
+          resolve(result.value);
+        } catch (err) {
+          reject(err);
+        }
+      };
+  
+      reader.readAsArrayBuffer(file);
+    });
+  };
+  
+  
+
+
+
+  const handleSubmit = async(e) => {
     e.preventDefault()
     // Handle form submission logic here
-    console.log("File:", file)
-    console.log("Job Description:", jobDescription)
+    if (!file || !jobDescription.trim()) {
+      alert("Please upload a resume and provide a job description")
+      return
+    }
+    
+    let resumeText=""
+    const filename= file.name.toLowerCase()
+
+    if(filename.endsWith(".pdf")){
+      resumeText= await extractTextFromPDF(file)
+    }else if(filename.endsWith(".docx")){
+      resumeText= await extractTextFromDocx(file)
+    }else{
+      alert("Unsupported file type. Please upload a PDF or DOCX file.")
+      return
+    }
+
+    console.log("Extracted Resume Text:", resumeText);
+
+    try{
+
+      const response = await fetch("http://localhost:8080/api/jobDesc" , {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({resumeText, jobDescription})
+      })
+
+      if(!response.ok){
+        throw new Error("Failed to generate tailored resume")
+      }
+
+      const data= await response.text()
+      console.log(data);
+
+
+    }catch(error){
+
+      console.error("Error:", error)
+      alert("An error occurred while generating the tailored resume. Please try again.")
+    }
   }
 
   return (
