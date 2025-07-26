@@ -100,10 +100,11 @@ PROJECTS
               </div>
 
               <div className="p-6">
-                <div className="bg-gray-50 rounded-lg p-6 max-h-96 overflow-y-auto">
-                  <pre className="whitespace-pre-wrap text-sm text-gray-800 font-mono leading-relaxed">
-                    {resumeContent}
-                  </pre>
+                <div className="bg-gray-50 rounded-lg p-6 max-h-[60rem] overflow-y-auto ">
+                  
+                  <iframe src="http://localhost:8080/resume_sample.pdf" width="100%" height="600px" className=" "></iframe>
+
+
                 </div>
               </div>
             </div>
