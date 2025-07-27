@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { UploadIcon, FileText, Briefcase } from "lucide-react"
 import mammoth from "mammoth";  
+import { useNavigate } from "react-router-dom"
 
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfWorker from '../pdfWorker'; // or './pdfWorker'
@@ -14,6 +15,7 @@ export default function Upload() {
   const [file, setFile] = useState(null)
   const [jobDescription, setJobDescription] = useState("")
   const [dragActive, setDragActive] = useState(false)
+  const navigate = useNavigate()
 
   const handleDrag = (e) => {
     e.preventDefault()
@@ -131,6 +133,8 @@ export default function Upload() {
       const data= await response.text()
       console.log(data);
 
+      
+      navigate("/result/"+data)
 
     }catch(error){
 

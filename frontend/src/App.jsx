@@ -13,7 +13,7 @@ function App() {
       <Route path="/" element={<Root />} >
         <Route index element={<Home />} />
         <Route path="upload" element={<Upload />} />
-        <Route path="result" element={<Result />} />
+        <Route path="result/:fileUID" element={<Result />} />
         <Route path="about" element={<About />} />
       </Route>
 

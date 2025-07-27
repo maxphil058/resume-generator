@@ -2,52 +2,36 @@
 
 import { Download, CheckCircle, Copy } from "lucide-react"
 import { useState } from "react"
+import { useParams } from "react-router-dom"
+import { useEffect } from "react"
+import Loading from "../components/Loading"
 
 export default function Result() {
   const [copied, setCopied] = useState(false)
+  const {fileUID}=useParams()
+  const [loading, setLoading] = useState(true)
+  const [filePath, setFilePath] = useState("")
 
-  // Mock resume data - replace with actual AI-generated content
-  const resumeContent = `John Doe
-Software Engineer
 
-CONTACT INFORMATION
-Email: john.doe@email.com
-Phone: (555) 123-4567
-LinkedIn: linkedin.com/in/johndoe
-Location: San Francisco, CA
-
-PROFESSIONAL SUMMARY
-Experienced Software Engineer with 5+ years of expertise in full-stack development, specializing in React, Node.js, and cloud technologies. Proven track record of delivering scalable web applications and leading cross-functional teams to achieve project goals.
-
-TECHNICAL SKILLS
-• Frontend: React, JavaScript, TypeScript, HTML5, CSS3, Tailwind CSS
-• Backend: Node.js, Express.js, Python, Java, Spring Boot
-• Databases: PostgreSQL, MongoDB, Redis
-• Cloud: AWS, Docker, Kubernetes
-• Tools: Git, Jenkins, Jira, Figma
-
-PROFESSIONAL EXPERIENCE
-
-Senior Software Engineer | TechCorp Inc. | 2021 - Present
-• Led development of customer-facing web applications serving 100K+ users
-• Implemented microservices architecture reducing system latency by 40%
-• Mentored junior developers and conducted code reviews
-• Collaborated with product managers to define technical requirements
-
-Software Engineer | StartupXYZ | 2019 - 2021
-• Developed responsive web applications using React and Node.js
-• Integrated third-party APIs and payment processing systems
-• Optimized database queries improving application performance by 25%
-• Participated in agile development processes and sprint planning
-
-EDUCATION
-Bachelor of Science in Computer Science
-University of California, Berkeley | 2019
-
-PROJECTS
-• E-commerce Platform: Built full-stack application with React and Express
-• Task Management App: Developed mobile-responsive web app with real-time updates
-• Open Source Contributor: Active contributor to popular JavaScript libraries`
+  console.log(fileUID)
+  
+  useEffect(()=>{
+    if (!fileUID) return;
+    const getResume=()=>{
+      try {
+        console.log(fileUID)
+        setFilePath(`http://localhost:8080/${fileUID}.pdf`)
+        // http://localhost:8080/resume_sample.pdf
+        
+        setLoading(false)
+        
+      } catch (error) {
+        console.error("Error fetching resume:", error)
+      }
+  
+    }
+    getResume()
+  },[fileUID])
 
   const handleCopy = async () => {
     try {
@@ -68,6 +52,14 @@ PROJECTS
     document.body.appendChild(element)
     element.click()
     document.body.removeChild(element)
+  }
+
+  if (loading || !fileUID) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loading size="lg" text="Generating your resume..." />
+      </div>
+    )
   }
 
   return (
@@ -102,7 +94,7 @@ PROJECTS
               <div className="p-6">
                 <div className="bg-gray-50 rounded-lg p-6 max-h-[60rem] overflow-y-auto ">
                   
-                  <iframe src="http://localhost:8080/resume_sample.pdf" width="100%" height="600px" className=" "></iframe>
+                  <iframe src= {filePath||"http://localhost:8080/resume_sample.pdf"} width="100%" height="600px" className=" "></iframe>
 
 
                 </div>
