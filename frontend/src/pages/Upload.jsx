@@ -132,9 +132,12 @@ export default function Upload() {
 
       const data= await response.text()
       console.log(data);
-
-      
-      navigate("/result/"+data)
+      if(data){
+        localStorage.setItem("updatedResume", data);
+        navigate("/result/")
+      }else{
+        alert("Failed to generate tailored resume. Please try again.")
+      }
 
     }catch(error){
 

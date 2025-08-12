@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "docx": "^9.5.1",
     "lucide-react": "^0.525.0",
     "mammoth": "^1.9.1",
+    "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^3.4.120",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
