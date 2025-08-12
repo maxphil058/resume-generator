@@ -174,13 +174,7 @@ const handleDownload = async (format) => {
 
 
 
-  if (!resumeContent) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loading size="lg" text="Generating your resume..." />
-      </div>
-    )
-  }
+  
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -215,7 +209,7 @@ const handleDownload = async (format) => {
                 <div className="bg-gray-50 rounded-lg p-6 max-h-[60rem] overflow-y-auto ">
                   
                   {/* <iframe src= {filePath||"http://localhost:8080/resume_sample.pdf"} width="100%" height="600px" className=" "></iframe> */}
-                  <textarea ref={textAreaRef} name="" id="" cols="30" rows="50" className="w-full h-full bg-gray-50 rounded-lg p-4" value={resumeString }> </textarea>
+                  <textarea ref={textAreaRef} name="" id="" cols="30" rows="50" className="w-full h-full bg-gray-50 rounded-lg p-4" value={resumeContent ||resumeString}> </textarea>
 
 
                 </div>
