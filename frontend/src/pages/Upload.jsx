@@ -9,7 +9,7 @@ import Loading from "../components/Loading"
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfWorker from '../pdfWorker'; // or './pdfWorker'
 
-// ✅ Use workerPort (not workerSrc)
+// ✅ Use workerPort (not workerSrc) 
 pdfjsLib.GlobalWorkerOptions.workerPort = new pdfWorker();
 
 
@@ -96,7 +96,7 @@ export default function Upload() {
   
 
 
-
+// To submit to the api after everyhting is confirmed 
   const handleSubmit = async(e) => {
     e.preventDefault()
     // Handle form submission logic here
