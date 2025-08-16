@@ -119,7 +119,7 @@ export default function Upload() {
       return
     }
 
-    console.log("Extracted Resume Text:", resumeText);
+    // console.log("Extracted Resume Text:", resumeText);
 
 
   
@@ -134,13 +134,16 @@ export default function Upload() {
       })
 
       if(!response.ok){
-        throw new Error("Failed to generate tailored resume")
+        setSubmitActive(false)
         navigate("/upload/")
+        throw new Error("Failed to generate tailored resume")
+
+
       }
 
       const data= await response.text()
       console.log(data);
-      console.log("Test 1")
+      
       if(data){
         localStorage.setItem("updatedResume", data);
         
