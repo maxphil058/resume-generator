@@ -135,6 +135,7 @@ export default function Upload() {
 
       if(!response.ok){
         throw new Error("Failed to generate tailored resume")
+        navigate("/upload/")
       }
 
       const data= await response.text()
