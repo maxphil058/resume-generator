@@ -19,6 +19,8 @@ export default function Upload() {
   const [dragActive, setDragActive] = useState(false)
   const [submitActive,setSubmitActive] = useState(false)
   const navigate = useNavigate()
+  const API = import.meta.env.VITE_API_URL;
+
 
   const handleDrag = (e) => {
     e.preventDefault()
@@ -123,7 +125,7 @@ export default function Upload() {
   
     try{
       setSubmitActive(true)
-      const response = await fetch("https://resumeapi-nipz.onrender.com/api/jobDesc" , {
+      const response = await fetch(`${API}/api/jobDesc` , {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
